@@ -1,6 +1,6 @@
 import general.Clause
 
-fun main(args: Array<String>) {
+fun main() {
     sat {
         val a = Variable("A")
         val b = Variable("B")

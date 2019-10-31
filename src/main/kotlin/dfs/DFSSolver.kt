@@ -2,6 +2,8 @@ package dfs
 
 import general.Formula
 import general.Solver
+import shifted.ShiftedLiteral
+import shifted.ShiftedVariable
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -10,7 +12,7 @@ import kotlin.collections.ArrayList
  * performs contradiction detection
  */
 @Suppress("FunctionName")
-class DFSSolver : Solver {
+open class DFSSolver : Solver {
     /**
      * Maps a variable index to
      * it's user-defined name
@@ -20,7 +22,7 @@ class DFSSolver : Solver {
     /**
      * Contains all variables
      */
-    private val variables = ArrayList<ShiftedVariable>()
+    protected val variables = ArrayList<ShiftedVariable>()
 
     /**
      * A sugar shortcut for variable definition.
@@ -36,16 +38,23 @@ class DFSSolver : Solver {
     }
 
     /**
-     * Returns true if a contradiction is detected
+     * Returns true if a contradiction is detected.
+     * Contradiction detection is done via checking if
+     * there is a clause with all variables assigned false
+     *
+     *   Time Complexity: O(nm), n - number of clauses
+     * Memory Complexity: Θ(1),  m - average number of literals per clause
      */
     private fun contradicts(
         formula: Formula<ShiftedLiteral>,
         values: BooleanArray,
         checkedCount: Int
     ): Boolean {
+        // Θ(number of clauses)
         for (clause in formula.clauses) {
             var canHaveNonFalseLiteral = false
 
+            // Θ(number of literals)
             for (literal in clause.literals) {
                 if (
                     literal.index >= checkedCount ||
@@ -65,21 +74,28 @@ class DFSSolver : Solver {
     }
 
     /**
-     * Returns the list of literals describing
+     * Returns the set of literals describing
      * the desired values for each variable or
      * null if no solution found
+     *
+     *   Time Complexity: O(nmk), n - number of clauses
+     * Memory Complexity: O(k),   m - average number of literals per clause
+     *                            k - number of variables
      */
-    fun solve(formula: Formula<ShiftedLiteral>): Set<ShiftedLiteral>? {
+    open fun solve(formula: Formula<ShiftedLiteral>): Set<ShiftedLiteral>? {
         // assigned values for all variables
+        // Θ(number of variables)
         val values = BooleanArray(variables.size)
         // what index we have reached so far
         var checkedCount = 0
 
         // for dfs
+        // O(number of variables)
         val nodes = LinkedList<ShiftedLiteral>()
         nodes.add(ShiftedLiteral(0))
         nodes.add(ShiftedLiteral(1))
 
+        // O(number of variables)
         while (nodes.isNotEmpty()) {
             val next = nodes.removeLast()
 
@@ -89,6 +105,7 @@ class DFSSolver : Solver {
 
             when {
                 // possible false assignment, go back
+                // O(mn) time
                 contradicts(formula, values, checkedCount) ->  {
                     checkedCount--
                 }
@@ -96,12 +113,14 @@ class DFSSolver : Solver {
                 // all variables assigned
                 checkedCount >= variables.size -> {
                     return values
+                        // Θ(number of variables)
                         .mapIndexed { index, isPositive ->
                             if (isPositive)
                                 ShiftedLiteral(index shl 1)
                             else
                                 ShiftedLiteral((index shl 1) + 1)
                         }
+                        // Θ(number of variables)
                         .toSet()
                 }
 

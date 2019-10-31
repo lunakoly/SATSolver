@@ -1,4 +1,4 @@
-package dfs
+package shifted
 
 import general.Clause
 import general.Literal
@@ -37,7 +37,7 @@ class ShiftedLiteral(val value: Int) : Literal {
      * the inverted value of the same
      * variable
      */
-    override val inversion: Literal
+    override val inversion: ShiftedLiteral
         get() = ShiftedLiteral(invertedValue)
 
     /**
