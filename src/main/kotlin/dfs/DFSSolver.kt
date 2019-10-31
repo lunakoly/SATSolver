@@ -78,9 +78,9 @@ open class DFSSolver : Solver {
      * the desired values for each variable or
      * null if no solution found
      *
-     *   Time Complexity: O(nmk), n - number of clauses
-     * Memory Complexity: O(k),   m - average number of literals per clause
-     *                            k - number of variables
+     *   Time Complexity: O(2^k * nm), n - number of clauses
+     * Memory Complexity: O(k),        m - average number of literals per clause
+     *                                 k - number of variables
      */
     open fun solve(formula: Formula<ShiftedLiteral>): Set<ShiftedLiteral>? {
         // assigned values for all variables
@@ -90,12 +90,14 @@ open class DFSSolver : Solver {
         var checkedCount = 0
 
         // for dfs
+        // at any time this checklist will
+        // contain no more than (number of variables + 1) nodes
         // O(number of variables)
         val nodes = LinkedList<ShiftedLiteral>()
         nodes.add(ShiftedLiteral(0))
         nodes.add(ShiftedLiteral(1))
 
-        // O(number of variables)
+        // O(2^(number of variables))
         while (nodes.isNotEmpty()) {
             val next = nodes.removeLast()
 

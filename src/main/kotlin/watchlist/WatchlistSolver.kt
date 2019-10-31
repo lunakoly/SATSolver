@@ -47,13 +47,9 @@ class WatchlistSolver : DFSSolver() {
      * the desired values for each variable or
      * null if no solution found
      *
-     *   Time Complexity: O(nm + km), n - number of clauses
+     *   Time Complexity: O(2^k * m), n - number of clauses
      * Memory Complexity: O(k),       m - average count of entries of each literal
      *                                k - number of variables
-     *
-     *                    And the funny thing is that the algorithm
-     *                    itself works for O(km), but preparing
-     *                    data structures takes O(nm)
      */
     override fun solve(formula: Formula<ShiftedLiteral>): Set<ShiftedLiteral>? {
         // maps literals to the clauses they appear in
@@ -87,12 +83,14 @@ class WatchlistSolver : DFSSolver() {
         var checkedCount = 0
 
         // for dfs
+        // at any time this checklist will
+        // contain no more than (number of variables + 1) nodes
         // O(number of variables)
         val nodes = LinkedList<ShiftedLiteral>()
         nodes.add(ShiftedLiteral(0))
         nodes.add(ShiftedLiteral(1))
 
-        // O(number of variables)
+        // O(2^(number of variables))
         while (nodes.isNotEmpty()) {
             val next = nodes.removeLast()
 
