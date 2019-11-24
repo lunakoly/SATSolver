@@ -2,9 +2,15 @@ package general
 
 /**
  * Represents a particular state
- * of a variable
+ * of an abstract variable
  */
-interface Literal {
+interface AbstractLiteral {
+    /**
+     * Returns the underlying variable
+     * the literal represents
+     */
+    val variable: AbstractVariable
+
     /**
      * Returns true if the literal represents
      * a positive variable state
@@ -16,5 +22,5 @@ interface Literal {
      * the inverted value of the same
      * variable
      */
-    val inversion: Literal
+    val inversion: AbstractLiteral
 }

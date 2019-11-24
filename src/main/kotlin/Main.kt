@@ -1,22 +1,22 @@
-import general.Clause
+import constructor.Variable
+import general.AbstractVariable
 
 fun main() {
-    sat {
-        val a = Variable("A")
-        val b = Variable("B")
-        val c = Variable("C")
+    val a = Variable()
+    val b = Variable()
+    val c = Variable()
 
-        val expression = ((+a) + (-b) + (-c)) * ((+b) + (-c)) * Clause(+c)
+    val expression = (+a + -b + -c) * (+b + -c) * +c
 
-        println("Representation: " + represent(expression))
-        println("     // Source: $expression")
+    val names = mapOf<AbstractVariable, String>(
+        a to "A",
+        b to "B",
+        c to "C"
+    )
 
-        val solution = solve(expression)
+    println("Representation: " + expression.represent(names))
 
-        if (solution != null) {
-            println("Solution: " + represent(solution))
-        } else {
-            println("No solutions found")
-        }
-    }
+    println("      One more: " + expression.represent {
+        names[it] ?: "<undefined>"
+    })
 }
