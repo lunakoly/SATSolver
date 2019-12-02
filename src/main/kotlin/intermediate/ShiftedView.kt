@@ -47,6 +47,10 @@ open class ShiftedView(
         override fun hashCode(): Int {
             return index
         }
+
+        override fun toString(): String {
+            return index.toString()
+        }
     }
 
     /**
@@ -122,6 +126,13 @@ open class ShiftedView(
         override fun hashCode(): Int {
             return value
         }
+
+        override fun toString(): String {
+            return if (isPositive)
+                "+$index ($value)"
+            else
+                "-$index ($value)"
+        }
     }
 
     /**
@@ -144,6 +155,10 @@ open class ShiftedView(
 
         init {
             this.literals.addAll(literals)
+        }
+
+        override fun toString(): String {
+            return represent { it.toString() }
         }
     }
 

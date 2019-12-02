@@ -9,7 +9,7 @@ import intermediate.ShiftedView
  * performs contradiction detection
  */
 @Suppress("FunctionName")
-open class PrimitiveSolver : AbstractSolver {
+open class PrimitiveSolver : AbstractSolver<PrimitiveView> {
     /**
      * Returns true if a contradiction is detected.
      * Contradiction detection is done via checking if
@@ -37,12 +37,7 @@ open class PrimitiveSolver : AbstractSolver {
         return false
     }
 
-    /**
-     * Returns the set of literals describing
-     * the desired values for each variable or
-     * null if no solution found
-     */
-    fun solve(view: PrimitiveView): Set<Literal>? {
+    override fun solve(view: PrimitiveView): Set<Literal>? {
         while (view.hasNextLiteral()) {
             val next = view.getNextLiteral()
 

@@ -3,8 +3,7 @@ package common
 import constructor.Formula
 import constructor.Literal
 import constructor.Variable
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 object SolverTests {
@@ -18,9 +17,6 @@ object SolverTests {
         val solution = solve(expression)
 
         assertEquals(setOf(+a, +b, +c), solution)
-
-//        println("Representation: " + expression.represent())
-//        println("      Solution: " + represent(solution ?: emptySet()))
     }
 
     @Test
@@ -46,9 +42,23 @@ object SolverTests {
     }
 
     @Test
+    fun testD(solve: (Formula) -> Set<Literal>?) {
+        val a = Variable()
+        val b = Variable()
+        val c = Variable()
+
+        val expression = (+a + +b) * (-b + +c + -a) * (-c + -b) * (+c + -b + +a)
+        val solution = solve(expression)
+
+        assertNotNull(solution)
+        assertTrue(expression.satisfies(solution!!))
+    }
+
+    @Test
     fun testAll(solve: (Formula) -> Set<Literal>?) {
         testA(solve)
         testB(solve)
         testC(solve)
+        testD(solve)
     }
 }

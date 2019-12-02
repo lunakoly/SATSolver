@@ -10,6 +10,12 @@ interface AbstractFormula {
     val clauses: Set<AbstractClause>
 
     /**
+     * Returns true if `solution` satisfies
+     * the formula
+     */
+    fun satisfies(solution: Set<AbstractLiteral>): Boolean
+
+    /**
      * Allows to get human-readable
      * representation, e. g. `(A + ~B + ~C)`
      */

@@ -2,6 +2,7 @@ package cdcl
 
 import constructor.Formula
 import intermediate.ShiftedView
+import intermediate.components.ShiftedWatchlist
 
 /**
  * Assigns each variable a unique index
@@ -78,6 +79,9 @@ class CDCLView(
         return BacktrackResult.OK
     }
 
+    /**
+     * Attempts to add a clause to the formula
+     */
     private fun learn(firstIndex: Int, second: Literal, secondOrigin: Clause?) {
         val firstOrigin = origins[firstIndex]
 
@@ -135,18 +139,6 @@ class CDCLView(
     private var nextLevel = -1
 
     /**
-     * what index we have reached so far
-     */
-//    private var checkedCount = 0
-
-    /**
-     * Approves the next literal in values
-     */
-//    fun checkNext() {
-//        checkedCount += 1
-//    }
-
-    /**
      * Returns the set of literals that
      * satisfy the formula if called at the
      * right time
@@ -161,15 +153,7 @@ class CDCLView(
      * Associates a literal and a set of clauses
      * it is met in
      */
-    private val watchlist = Array<MutableSet<Clause>>(cardinality * 2) { mutableSetOf() }
-
-    /**
-     * Returns a set of clauses associated
-     * with the inversion of the given literal
-     */
-    private fun getRelativeClauses(literal: Literal): Set<Clause> {
-        return watchlist[literal.invertedValue]
-    }
+    private val watchlist = ShiftedWatchlist(cardinality, clauses)
 
     /**
      * Returns true if there're some
@@ -236,18 +220,13 @@ class CDCLView(
 
         index += 1
 
-        for (clause in getRelativeClauses(literal)) {
+        for (clause in watchlist[literal.inversion]) {
             if (analyze(clause, literal) == BacktrackResult.UNSATISFIED) {
                 return BacktrackResult.UNSATISFIED
             }
         }
 
-        // already assigned everything
-//        if (!hasNextLiteral()) {
-//            return BacktrackResult.OK
-//        }
-
-        for (clause in getRelativeClauses(literal.inversion)) {
+        for (clause in watchlist[literal]) {
             if (analyze(clause, literal) == BacktrackResult.UNSATISFIED) {
                 return BacktrackResult.UNSATISFIED
             }
@@ -263,8 +242,6 @@ class CDCLView(
     private fun backtrack(literal: Literal): BacktrackResult {
         for (it in index - 1 downTo 0) {
             if (values[it] == literal) {
-//                checkedCount = it
-
                 if (levels[it] == -1) {
                     return BacktrackResult.UNSATISFIED
                 }
@@ -284,15 +261,5 @@ class CDCLView(
         }
 
         throw IllegalArgumentException("Literal is not in values")
-    }
-
-    init {
-        // fill the watchlist
-        for (clause in clauses) {
-            // Θ(number of literals per clause)
-            for (literal in clause.literals) {
-                watchlist[literal.value].add(clause)
-            }
-        }
     }
 }

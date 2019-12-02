@@ -2,6 +2,7 @@ package primitive
 
 import constructor.Formula
 import intermediate.ShiftedView
+import intermediate.components.ShiftedWatchlist
 import java.util.*
 
 /**
@@ -49,7 +50,7 @@ class PrimitiveView(
     /**
      * Assigned values of variables
      */
-    private val values: BooleanArray
+    private val values = BooleanArray(cardinality)
 
     /**
      * Sets the value of some variable
@@ -119,33 +120,22 @@ class PrimitiveView(
      * Associates a literal and a set of clauses
      * it is met in
      */
-    private val watchlist: Array<MutableSet<Clause>>
+    private val watchlist = ShiftedWatchlist(cardinality, clauses)
 
     /**
      * Returns a set of clauses associated
      * with the inversion of the given literal
+     *
+     *   Time Complexity: Θ(1)
+     * Memory Complexity: Θ(1)
      */
     fun getRelativeClauses(literal: Literal): Set<Clause> {
-        return watchlist[literal.invertedValue]
+        return watchlist[literal.inversion]
     }
 
     init {
         // first variable possible states
         checkStack.add(Literal(0))
         checkStack.add(Literal(1))
-
-        values = BooleanArray(cardinality)
-
-        watchlist = Array(cardinality * 2) {
-            mutableSetOf<Clause>()
-        }
-
-        // fill the watchlist
-        for (clause in clauses) {
-            // Θ(number of literals per clause)
-            for (literal in clause.literals) {
-                watchlist[literal.value].add(clause)
-            }
-        }
     }
 }
