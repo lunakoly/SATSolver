@@ -56,7 +56,7 @@ abstract class LeveledView(
     /**
      * Points the the next unchecked cell
      */
-    private var uncheckedIndex = 0
+    protected var uncheckedIndex = 0
 
     /**
      * Returns true if the solution is found
@@ -195,22 +195,22 @@ abstract class LeveledView(
      * clauses it's met in can be unsatisfied with
      * the present assignments
      */
-    fun deduce(): AnalysisResult {
+    fun deduce(): Pair<AnalysisResult, Clause?> {
         val literal = values[uncheckedIndex - 1]
 
         for (clause in watchlist[literal]) {
             if (analyze(clause) == AnalysisResult.UNSATISFIED) {
-                return AnalysisResult.UNSATISFIED
+                return AnalysisResult.UNSATISFIED to clause
             }
         }
 
         for (clause in watchlist[literal.inversion]) {
             if (analyze(clause) == AnalysisResult.UNSATISFIED) {
-                return AnalysisResult.UNSATISFIED
+                return AnalysisResult.UNSATISFIED to clause
             }
         }
 
-        return AnalysisResult.OK
+        return AnalysisResult.OK to null
     }
 
     /**

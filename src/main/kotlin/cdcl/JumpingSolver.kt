@@ -1,4 +1,4 @@
-package cdcl.no_recursion
+package cdcl
 
 import constructor.Literal
 import general.AbstractSolver

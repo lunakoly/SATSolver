@@ -1,4 +1,4 @@
-package cdcl.no_recursion
+package cdcl
 
 import common.SolverTests.testAll
 import org.junit.jupiter.api.Test

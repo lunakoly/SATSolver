@@ -1,4 +1,4 @@
-package cdcl.no_recursion
+package cdcl
 
 import constructor.Literal
 import general.AbstractSolver
@@ -12,7 +12,7 @@ class LearningSolver : AbstractSolver<LearningView> {
 
                 if (
                     view.check() == LeveledView.CheckResult.DUPLICATE ||
-                    view.deduce() == LeveledView.AnalysisResult.UNSATISFIED
+                    view.deduce().first == LeveledView.AnalysisResult.UNSATISFIED
                 ) {
                     return null
                 }
@@ -25,11 +25,15 @@ class LearningSolver : AbstractSolver<LearningView> {
                 view.push(next, null)
             }
 
-            if (
-                view.check() == LeveledView.CheckResult.DUPLICATE ||
-                view.deduce() == LeveledView.AnalysisResult.UNSATISFIED
-            ) {
+            if (view.check() == LeveledView.CheckResult.DUPLICATE) {
                 view.backtrack()
+            } else {
+                val (analysisResult, contradictingClause) = view.deduce()
+
+                if (analysisResult == LeveledView.AnalysisResult.UNSATISFIED) {
+                    view.learn(contradictingClause)
+                    view.backtrack()
+                }
             }
         }
 

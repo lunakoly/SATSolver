@@ -1,4 +1,4 @@
-package cdcl.no_recursion
+package cdcl
 
 import constructor.Formula
 import intermediate.LeveledView
@@ -50,11 +50,41 @@ class LearningView(
         // unassigned != null will always be true here
         // but let's satisfy at least the compiler
         else if (unassignedLeft == 1 && approved == 0 && unassigned != null) {
-            println(values.joinToString(", ") { it.value.toString() })
-            println(clause.literals.joinToString(" + ") { it.value.toString() })
             push(unassigned, clause)
         }
 
         return AnalysisResult.OK
+    }
+
+    /**
+     * Assuming that the last checked literal
+     * controverts the given clause, learns the common
+     * variables from `contradictingClause` and the literal
+     * origin
+     */
+    fun learn(contradictingClause: Clause?) {
+        val contradictingVariable = values[uncheckedIndex - 1].variable
+        val literalOrigin = origins[uncheckedIndex - 1]
+
+        if (
+            contradictingClause != null &&
+            literalOrigin != null
+        ) {
+            val result = Clause()
+
+            contradictingClause.literals
+                .filter { it.variable == contradictingVariable }
+                .forEach {
+                    result.literals.add(it)
+                }
+
+            literalOrigin.literals
+                .filter { it.variable == contradictingVariable }
+                .forEach {
+                    result.literals.add(it)
+                }
+
+            clauses.add(result)
+        }
     }
 }
