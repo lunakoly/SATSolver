@@ -7,7 +7,7 @@ import intermediate.LeveledView
  * LeveledView that learns
  * contradicting clauses
  */
-class LearningView(
+open class LearningView(
     /**
      * An input formula constructed by
      * a user
@@ -43,6 +43,10 @@ class LearningView(
     override fun analyze(clause: Clause): AnalysisResult {
         val (unassignedLeft, unassigned, approved) = evaluate(clause)
 
+        if (approved > 0) {
+            return AnalysisResult.APPROVED
+        }
+
         if (unassignedLeft == 0 && approved == 0) {
             return AnalysisResult.UNSATISFIED
         }
@@ -70,6 +74,8 @@ class LearningView(
             contradictingClause != null &&
             literalOrigin != null
         ) {
+            // no duplicates because Clause
+            // stores a set of literals
             val result = Clause()
 
             contradictingClause.literals

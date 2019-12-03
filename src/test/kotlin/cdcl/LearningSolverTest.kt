@@ -10,5 +10,10 @@ internal class LearningSolverTest {
             val view = LearningView(it)
             LearningSolver().solve(view)
         }
+
+        testAll {
+            val view = LazyLearningView(it)
+            LearningSolver().solve(view)
+        }
     }
 }

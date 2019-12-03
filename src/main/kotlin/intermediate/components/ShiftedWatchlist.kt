@@ -6,7 +6,7 @@ import intermediate.ShiftedView
 /**
  * Maps each literal to the set of clauses it's met in
  */
-class ShiftedWatchlist(
+open class ShiftedWatchlist(
     /**
      * Number of variables
      */
@@ -24,7 +24,7 @@ class ShiftedWatchlist(
      *                           m - average number of clauses each literal
      *                               takes part in
      */
-    private val watchlist = Array<MutableSet<ShiftedView.Clause>>(cardinality * 2) { mutableSetOf() }
+    protected val watchlist = Array<MutableSet<ShiftedView.Clause>>(cardinality * 2) { mutableSetOf() }
 
     /**
      * Returns a set of clauses associated
@@ -33,7 +33,7 @@ class ShiftedWatchlist(
      *   Time Complexity: Θ(1)
      * Memory Complexity: Θ(1)
      */
-    operator fun get(literal: ShiftedView.Literal) : MutableSet<ShiftedView.Clause> {
+    open operator fun get(literal: ShiftedView.Literal) : MutableSet<ShiftedView.Clause> {
         return watchlist[literal.value]
     }
 

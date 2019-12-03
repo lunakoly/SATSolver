@@ -4,6 +4,10 @@ import constructor.Literal
 import general.AbstractSolver
 import intermediate.LeveledView
 
+/**
+ * Solver that can both do non-chronological
+ * jumps and learn contradicting clauses
+ */
 class LearningSolver : AbstractSolver<LearningView> {
     override fun solve(view: LearningView): Set<Literal>? {
         for (clause in view.clauses) {

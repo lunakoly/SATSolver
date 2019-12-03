@@ -21,7 +21,7 @@ abstract class LeveledView(
      * Associates a literal and a set of clauses
      * it is met in
      */
-    private val watchlist = ShiftedWatchlist(cardinality, clauses)
+    protected open val watchlist = ShiftedWatchlist(cardinality, clauses)
 
     /**
      * Assigned values of variables.
@@ -114,7 +114,7 @@ abstract class LeveledView(
      * Jumps to the beginning of the present
      * level, reverting all deductions made during it
      */
-    fun backtrack() {
+    open fun backtrack() {
         val levelEndIndex = uncheckedIndex - 1
         var levelStartIndex = levelEndIndex
 
@@ -179,10 +179,12 @@ abstract class LeveledView(
     /**
      * Represents a state of algorithm.
      * UNSATISFIED means that some clause can't be
-     * satisfied with the present assignments
+     * satisfied with the present assignments.
+     * APPROVED means that the clause is already
+     * satisfied. Otherwise OK
      */
     enum class AnalysisResult {
-        UNSATISFIED, OK
+        UNSATISFIED, OK, APPROVED
     }
 
     /**
@@ -195,7 +197,7 @@ abstract class LeveledView(
      * clauses it's met in can be unsatisfied with
      * the present assignments
      */
-    fun deduce(): Pair<AnalysisResult, Clause?> {
+    open fun deduce(): Pair<AnalysisResult, Clause?> {
         val literal = values[uncheckedIndex - 1]
 
         for (clause in watchlist[literal]) {

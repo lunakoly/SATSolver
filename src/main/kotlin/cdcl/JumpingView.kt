@@ -34,6 +34,10 @@ open class JumpingView(
     override fun analyze(clause: Clause): AnalysisResult {
         val (unassignedLeft, unassigned, approved) = evaluate(clause)
 
+        if (approved > 0) {
+            return AnalysisResult.APPROVED
+        }
+
         if (unassignedLeft == 0 && approved == 0) {
             return AnalysisResult.UNSATISFIED
         }
