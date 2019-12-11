@@ -1,7 +1,6 @@
 import cdcl.LearningSolver
 import cdcl.LearningView
 import constructor.Variable
-import general.AbstractVariable
 
 fun main() {
     val a = Variable()
@@ -10,7 +9,7 @@ fun main() {
 
     val expression = (+a + -b + -c) * (+b + -c) * +c
 
-    val names = mapOf<AbstractVariable, String>(
+    val names = mapOf(
         a to "A",
         b to "B",
         c to "C"
@@ -23,12 +22,10 @@ fun main() {
     })
 
     val view = LearningView(expression)
-    val solution = LearningSolver().solve(view)
+    val solution = LearningSolver.solve(view)
 
     if (solution != null) {
-        println("      Solution: " + solution.joinToString(" * ") {
-            names[it.variable] ?: "<undefined>"
-        })
+        println("      Solution: " + solution.represent(names))
     } else {
         print("      Solution: Not found")
     }

@@ -68,7 +68,7 @@ open class ShiftedView(
     /**
      * A handy alias
      */
-    protected fun constructor.Variable.toInner(): Variable {
+    private fun constructor.Variable.toInner(): Variable {
         return innerVariables[this]!!
     }
 
@@ -197,5 +197,11 @@ open class ShiftedView(
 
             clauses.add(innerClause)
         }
+
+//        println("   Inner: " + clauses.joinToString(" * ") {
+//            it.represent { variable ->
+//                variable.toString()
+//            }
+//        })
     }
 }

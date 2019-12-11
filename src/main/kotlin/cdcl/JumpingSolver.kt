@@ -1,21 +1,21 @@
 package cdcl
 
-import constructor.Literal
+import constructor.Solution
 import general.AbstractSolver
 import intermediate.LeveledView
 
 /**
  * A solver that can do non-chronological jumps
  */
-class JumpingSolver : AbstractSolver<JumpingView> {
-    override fun solve(view: JumpingView): Set<Literal>? {
+object JumpingSolver : AbstractSolver<JumpingView> {
+    override fun solve(view: JumpingView): Solution? {
         for (clause in view.clauses) {
             if (clause.literals.size == 1) {
                 view.push(clause.literals.first(), true)
 
                 if (
                     view.check() == LeveledView.CheckResult.DUPLICATE ||
-                    view.deduce() == LeveledView.AnalysisResult.UNSATISFIED
+                    view.deduce().first == LeveledView.AnalysisResult.UNSATISFIED
                 ) {
                     return null
                 }
@@ -30,9 +30,11 @@ class JumpingSolver : AbstractSolver<JumpingView> {
 
             if (
                 view.check() == LeveledView.CheckResult.DUPLICATE ||
-                view.deduce() == LeveledView.AnalysisResult.UNSATISFIED
+                view.deduce().first == LeveledView.AnalysisResult.UNSATISFIED
             ) {
-                view.backtrack()
+                if (view.backtrack() == LeveledView.BacktrackingResult.UNSATISFIED) {
+                    return null
+                }
             }
         }
 

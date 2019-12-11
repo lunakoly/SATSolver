@@ -1,6 +1,7 @@
 package intermediate
 
 import constructor.Formula
+import constructor.Solution
 import intermediate.components.ShiftedWatchlist
 
 /**
@@ -34,11 +35,13 @@ abstract class LeveledView(
      * satisfy the formula if called at the
      * right time
      */
-    fun exportSolution(): Set<constructor.Literal> {
-        return values
+    fun exportSolution(): Solution {
+        val assignments = values
             .slice(0 until cardinality)
             .map { it.toOuter() }
             .toSet()
+
+        return Solution(assignments)
     }
 
     /**
@@ -101,7 +104,9 @@ abstract class LeveledView(
             if (other.index == literal.index) {
                 // due to the algorithm it can only happen
                 // if literal.isPositive != other.isPositive
-                // so we need to backtrack
+                // so we need to backtrack.
+                // DOUBLE INSERTIONS ARE PREVENTED
+                // INSIDE PUSH()
                 return CheckResult.DUPLICATE
             }
         }
@@ -111,10 +116,19 @@ abstract class LeveledView(
     }
 
     /**
+     * Represents the result of backtracking.
+     * UNSATISFIED means that we formula is
+     * unsatisfiable at all. Otherwise OK
+     */
+    enum class BacktrackingResult {
+        UNSATISFIED, OK
+    }
+
+    /**
      * Jumps to the beginning of the present
      * level, reverting all deductions made during it
      */
-    open fun backtrack() {
+    open fun backtrack(): BacktrackingResult {
         val levelEndIndex = uncheckedIndex - 1
         var levelStartIndex = levelEndIndex
 
@@ -125,18 +139,21 @@ abstract class LeveledView(
             }
         }
 
+        if (levels[levelStartIndex] == -1) {
+            return BacktrackingResult.UNSATISFIED
+        }
+
         values[levelStartIndex] = values[levelStartIndex].inversion
 
-        if (levelStartIndex == 0) {
-            levels[levelStartIndex] -= 1
-        } else {
-            levels[levelStartIndex] = levels[levelStartIndex - 1]
-        }
+        levels[levelStartIndex] -= 1
+        nextLevel = levels[levelStartIndex]
 
         nextIndex = levelStartIndex + 1
         // we want to check the inverted value
         // of the starting variable
         uncheckedIndex = levelStartIndex
+
+        return BacktrackingResult.OK
     }
 
     /**

@@ -1,7 +1,7 @@
 package constructor
 
 import general.AbstractFormula
-import general.AbstractLiteral
+import general.AbstractSolution
 import general.AbstractVariable
 
 /**
@@ -31,10 +31,10 @@ class Formula(
         return this
     }
 
-    override fun satisfies(solution: Set<AbstractLiteral>): Boolean {
+    override fun satisfies(solution: AbstractSolution): Boolean {
         val assignments = mutableMapOf<AbstractVariable, Boolean>()
 
-        for (it in solution) {
+        for (it in solution.literals) {
             assignments[it.variable] = it.isPositive
         }
 

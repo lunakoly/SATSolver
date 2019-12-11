@@ -8,7 +8,7 @@ internal class JumpingSolverTest {
     fun solve() {
         testAll {
             val view = JumpingView(it)
-            JumpingSolver().solve(view)
+            JumpingSolver.solve(view)
         }
     }
 }

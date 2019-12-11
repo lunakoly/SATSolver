@@ -13,6 +13,11 @@ interface AbstractClause {
      * Allows to get human-readable
      * representation, e. g. `(A + ~B + ~C)`
      */
-    fun represent(decode: (AbstractVariable) -> String)
-            = "(" + literals.joinToString(" + ") { decode(it.variable) } + ")"
+    fun represent(decode: (AbstractVariable) -> String) = "(" + literals.joinToString(" + ") {
+        if (it.isPositive) {
+            decode(it.variable)
+        } else {
+            "~" + decode(it.variable)
+        }
+    } + ")"
 }

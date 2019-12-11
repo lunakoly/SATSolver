@@ -8,12 +8,15 @@ internal class LearningSolverTest {
     fun solve() {
         testAll {
             val view = LearningView(it)
-            LearningSolver().solve(view)
+            LearningSolver.solve(view)
         }
+    }
 
+    @Test
+    fun solveLazy() {
         testAll {
             val view = LazyLearningView(it)
-            LearningSolver().solve(view)
+            LearningSolver.solve(view)
         }
     }
 }

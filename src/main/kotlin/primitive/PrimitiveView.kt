@@ -1,6 +1,7 @@
 package primitive
 
 import constructor.Formula
+import constructor.Solution
 import intermediate.ShiftedView
 import intermediate.components.ShiftedWatchlist
 import java.util.*
@@ -72,12 +73,23 @@ class PrimitiveView(
      * satisfy the formula if called at the
      * right time
      */
-    fun exportSolution(): Set<constructor.Literal> {
-        return values
+    fun exportSolution(): Solution {
+        val assignments = values
             .mapIndexed { index, isPositive ->
                 Variable(index).toOuter().toLiteral(isPositive)
             }
             .toSet()
+
+//        println("   Inner Solution: " + values
+//                .mapIndexed { index, isPositive ->
+//                    Variable(index).toLiteral(isPositive)
+//                }
+//            .joinToString(" * ") {
+//                it.toString()
+//            }
+//        )
+
+        return Solution(assignments)
     }
 
     /**

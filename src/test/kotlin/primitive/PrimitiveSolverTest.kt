@@ -8,7 +8,7 @@ internal class PrimitiveSolverTest {
     fun solve() {
         testAll {
             val view = PrimitiveView(it)
-            PrimitiveSolver().solve(view)
+            PrimitiveSolver.solve(view)
         }
     }
 }

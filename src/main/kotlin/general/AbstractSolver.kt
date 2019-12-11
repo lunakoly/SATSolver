@@ -1,7 +1,5 @@
 package general
 
-import constructor.Literal
-
 /**
  * Represents an abstract SAT solver.
  */
@@ -11,5 +9,5 @@ interface AbstractSolver<View : AbstractView> {
      * the desired values for each variable or
      * null if no solution found
      */
-    fun solve(view: View): Set<Literal>?
+    fun solve(view: View): AbstractSolution?
 }

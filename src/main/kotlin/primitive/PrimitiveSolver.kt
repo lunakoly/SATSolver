@@ -1,6 +1,6 @@
 package primitive
 
-import constructor.Literal
+import constructor.Solution
 import general.AbstractSolver
 import intermediate.ShiftedView
 
@@ -9,7 +9,7 @@ import intermediate.ShiftedView
  * performs contradiction detection
  */
 @Suppress("FunctionName")
-open class PrimitiveSolver : AbstractSolver<PrimitiveView> {
+object PrimitiveSolver : AbstractSolver<PrimitiveView> {
     /**
      * Returns true if a contradiction is detected.
      * Contradiction detection is done via checking if
@@ -37,7 +37,7 @@ open class PrimitiveSolver : AbstractSolver<PrimitiveView> {
         return false
     }
 
-    override fun solve(view: PrimitiveView): Set<Literal>? {
+    override fun solve(view: PrimitiveView): Solution? {
         while (view.hasNextLiteral()) {
             val next = view.getNextLiteral()
 

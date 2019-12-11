@@ -25,6 +25,13 @@ open class LearningView(
      * approved ones that need to be checked later
      */
     fun push(literal: Literal, origin: Clause? = null) {
+        // prevent multiple exertions
+        for (it in 0 until nextIndex) {
+            if (values[it] == literal) {
+                return
+            }
+        }
+
         // to not have a deduction origin == to be selected manually
         if (origin == null) {
             nextLevel += 1
