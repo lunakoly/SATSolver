@@ -5,7 +5,7 @@ import general.AbstractSolver
 import intermediate.LeveledView
 
 /**
- * A solver that can do non-chronological jumps
+ * A solver that can do jumps over deduction levels
  */
 object JumpingSolver : AbstractSolver<JumpingView> {
     override fun solve(view: JumpingView): Solution? {

@@ -43,35 +43,15 @@ class LazyLearningView(
         return AnalysisResult.OK to null
     }
 
-    override fun backtrack(): BacktrackingResult {
-        val levelEndIndex = uncheckedIndex - 1
-        var levelStartIndex = levelEndIndex
+    override fun backtrack(contradictingClause: Clause?): BacktrackingResult {
+        val result = super.backtrack(contradictingClause)
 
-        for (it in 0 until uncheckedIndex - 1) {
-            if (levels[it] == levels[uncheckedIndex - 1]) {
-                levelStartIndex = it
-                break
+        if (result == BacktrackingResult.OK) {
+            watchlist.updateApproved {
+                evaluate(it).third
             }
         }
 
-        if (levels[levelStartIndex] == -1) {
-            return BacktrackingResult.UNSATISFIED
-        }
-
-        values[levelStartIndex] = values[levelStartIndex].inversion
-
-        levels[levelStartIndex] -= 1
-        nextLevel = levels[levelStartIndex]
-
-        nextIndex = levelStartIndex + 1
-        // we want to check the inverted value
-        // of the starting variable
-        uncheckedIndex = levelStartIndex
-
-        watchlist.updateApproved {
-            evaluate(it).third
-        }
-
-        return BacktrackingResult.OK
+        return result
     }
 }

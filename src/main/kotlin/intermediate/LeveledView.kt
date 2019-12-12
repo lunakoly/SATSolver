@@ -125,35 +125,35 @@ abstract class LeveledView(
     }
 
     /**
-     * Jumps to the beginning of the present
-     * level, reverting all deductions made during it
+     * Returns the index of the first literal
+     * with the same level as the one at the `index`
      */
-    open fun backtrack(): BacktrackingResult {
-        val levelEndIndex = uncheckedIndex - 1
-        var levelStartIndex = levelEndIndex
+    protected fun findLevelStart(index: Int): Int {
+        var result = 0
 
-        for (it in 0 until uncheckedIndex - 1) {
-            if (levels[it] == levels[uncheckedIndex - 1]) {
-                levelStartIndex = it
-                break
-            }
+        // find the beginning of the level
+        // (the literal assigned manually)
+        while (levels[result] != levels[index]) {
+            result++
         }
 
-        if (levels[levelStartIndex] == -1) {
-            return BacktrackingResult.UNSATISFIED
+        return result
+    }
+
+    /**
+     * Returns the index of the last literal
+     * with the same level as the one at the `index`
+     */
+    protected fun findLevelEnd(index: Int): Int {
+        var result = uncheckedIndex - 1
+
+        // find the beginning of the level
+        // (the literal assigned manually)
+        while (levels[result] != levels[index]) {
+            result --
         }
 
-        values[levelStartIndex] = values[levelStartIndex].inversion
-
-        levels[levelStartIndex] -= 1
-        nextLevel = levels[levelStartIndex]
-
-        nextIndex = levelStartIndex + 1
-        // we want to check the inverted value
-        // of the starting variable
-        uncheckedIndex = levelStartIndex
-
-        return BacktrackingResult.OK
+        return result
     }
 
     /**

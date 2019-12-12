@@ -126,7 +126,7 @@ object SolverTests {
     }
 
     private fun benchmark(solve: (Formula) -> Solution?) {
-        for (i in 1 until 1000) {
+        for (i in 1..1000) {
             benchmarkFile("benchmark/uf20-91/uf20-0$i.cnf", solve)
         }
     }

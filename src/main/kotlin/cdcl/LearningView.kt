@@ -5,7 +5,7 @@ import intermediate.LeveledView
 
 /**
  * LeveledView that learns
- * contradicting clauses
+ * contradicting clauses and can do NCB
  */
 open class LearningView(
     /**
@@ -71,9 +71,9 @@ open class LearningView(
      * Assuming that the last checked literal
      * controverts the given clause, learns the common
      * variables from `contradictingClause` and the literal
-     * origin
+     * origin. Returns the new clause or null
      */
-    fun learn(contradictingClause: Clause?) {
+    fun learn(contradictingClause: Clause?): Clause? {
         val contradictingVariable = values[uncheckedIndex - 1].variable
         val literalOrigin = origins[uncheckedIndex - 1]
 
@@ -98,6 +98,68 @@ open class LearningView(
                 }
 
             clauses.add(result)
+            return result
         }
+
+        return null
+    }
+
+    /**
+     * Non-chronological jumps over
+     * previous levels
+     */
+    open fun backtrack(contradictingClause: Clause?): BacktrackingResult {
+        val levelEndIndex = uncheckedIndex - 1
+        val levelStartIndex = findLevelStart(levelEndIndex)
+
+        if (levels[levelStartIndex] == -1) {
+            return BacktrackingResult.UNSATISFIED
+        }
+
+        // let's invert either the last manually assigned
+        // variable (and all it's deductions) or the one
+        // from the contradictingClause that was assigned
+        // before the last. This is correct because in
+        // contradictingClause the last assigned variable
+        // is the only one left
+        var backtrackingIndex = levelStartIndex
+
+        // find a candidate
+        if (contradictingClause != null) {
+            var it = levelStartIndex - 1
+            var shouldStop = false
+
+            // find the latest literal from
+            // the clause
+            while (it >= 0 && !shouldStop) {
+                for (literal in contradictingClause.literals) {
+                    if (values[it] == literal) {
+                        // find it's deduction level end
+                        backtrackingIndex = findLevelEnd(it) + 1
+                        shouldStop = true
+                        break
+                    }
+                }
+
+                it--
+            }
+        }
+
+        values[backtrackingIndex] = values[levelStartIndex].inversion
+
+        if (backtrackingIndex == 0) {
+            levels[backtrackingIndex] = -1
+        } else {
+            levels[backtrackingIndex] = levels[backtrackingIndex - 1]
+        }
+
+        nextLevel = levels[backtrackingIndex]
+        nextIndex = backtrackingIndex + 1
+
+        // we want to check the inverted value
+        // of the starting variable
+        uncheckedIndex = backtrackingIndex
+
+        return BacktrackingResult.OK
     }
 }

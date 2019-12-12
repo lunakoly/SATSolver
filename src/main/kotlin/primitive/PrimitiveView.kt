@@ -80,15 +80,6 @@ class PrimitiveView(
             }
             .toSet()
 
-//        println("   Inner Solution: " + values
-//                .mapIndexed { index, isPositive ->
-//                    Variable(index).toLiteral(isPositive)
-//                }
-//            .joinToString(" * ") {
-//                it.toString()
-//            }
-//        )
-
         return Solution(assignments)
     }
 

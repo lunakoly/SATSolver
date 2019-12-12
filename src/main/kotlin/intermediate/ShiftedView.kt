@@ -68,7 +68,7 @@ open class ShiftedView(
     /**
      * A handy alias
      */
-    private fun constructor.Variable.toInner(): Variable {
+    protected fun constructor.Variable.toInner(): Variable {
         return innerVariables[this]!!
     }
 
@@ -137,6 +137,15 @@ open class ShiftedView(
 
     /**
      * Maps an inner literal to it's
+     * inner analogue
+     */
+    protected fun constructor.Literal.toInner(): Literal {
+        val innerVariable = innerVariables[this.variable]!!
+        return innerVariable.toLiteral(this.isPositive)
+    }
+
+    /**
+     * Maps an inner literal to it's
      * outer analogue
      */
     protected fun Literal.toOuter(): constructor.Literal {
@@ -177,6 +186,7 @@ open class ShiftedView(
         get() = outerVariables.size
 
     init {
+        // copy formula clauses into inner representation
         for (clause in formula.clauses) {
             val innerClause = Clause()
 
@@ -197,11 +207,5 @@ open class ShiftedView(
 
             clauses.add(innerClause)
         }
-
-//        println("   Inner: " + clauses.joinToString(" * ") {
-//            it.represent { variable ->
-//                variable.toString()
-//            }
-//        })
     }
 }

@@ -14,11 +14,13 @@ interface AbstractSolution {
      * Allows to get human-readable
      * representation, e. g. `A * ~B * ~C`
      */
-    fun represent(names: Map<out AbstractVariable, String>) = literals.joinToString(" * ") {
-        if (it.isPositive) {
-            names[it.variable] ?: "<undefined>"
-        } else {
-            "~" + (names[it.variable] ?: "<undefined>")
-        }
-    }
+    fun represent(decode: (AbstractVariable) -> String)
+            = literals.joinToString(" * ") { it.represent(decode) }
+
+    /**
+     * Allows to get human-readable
+     * representation, e. g. `A * ~B * ~C`
+     */
+    fun represent(names: Map<out AbstractVariable, String>)
+            = literals.joinToString(" * ") { it.represent(names) }
 }

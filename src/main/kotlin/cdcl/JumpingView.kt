@@ -35,9 +35,6 @@ open class JumpingView(
         nextIndex += 1
     }
 
-    /**
-     * Checks if a clause can be unsatisfied
-     */
     override fun analyze(clause: Clause): AnalysisResult {
         val (unassignedLeft, unassigned, approved) = evaluate(clause)
 
@@ -56,5 +53,31 @@ open class JumpingView(
         }
 
         return AnalysisResult.OK
+    }
+
+    /**
+     * Jumps to the beginning of the present
+     * level, reverting all deductions made during it
+     */
+    open fun backtrack(): BacktrackingResult {
+        val levelEndIndex = uncheckedIndex - 1
+        val levelStartIndex = findLevelStart(levelEndIndex)
+
+        if (levels[levelStartIndex] == -1) {
+            return BacktrackingResult.UNSATISFIED
+        }
+
+        values[levelStartIndex] = values[levelStartIndex].inversion
+
+        levels[levelStartIndex] -= 1
+        nextLevel = levels[levelStartIndex]
+
+        nextIndex = levelStartIndex + 1
+
+        // we want to check the inverted value
+        // of the starting variable
+        uncheckedIndex = levelStartIndex
+
+        return BacktrackingResult.OK
     }
 }

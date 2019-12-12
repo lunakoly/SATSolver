@@ -26,9 +26,6 @@ interface AbstractFormula {
      * Allows to get human-readable
      * representation, e. g. `(A + ~B + ~C)`
      */
-    fun represent(names: Map<out AbstractVariable, String>) = clauses.joinToString(" * ") {
-        it.represent { variable ->
-            names[variable] ?: "<unnamed>"
-        }
-    }
+    fun represent(names: Map<out AbstractVariable, String>)
+            = clauses.joinToString(" * ") { it.represent(names) }
 }

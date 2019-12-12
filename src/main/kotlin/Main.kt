@@ -26,6 +26,9 @@ fun main() {
 
     if (solution != null) {
         println("      Solution: " + solution.represent(names))
+        println("      One more: " + solution.represent {
+            names[it] ?: "<undefined>"
+        })
     } else {
         print("      Solution: Not found")
     }

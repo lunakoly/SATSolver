@@ -30,14 +30,16 @@ object LearningSolver : AbstractSolver<LearningView> {
             }
 
             if (view.check() == LeveledView.CheckResult.DUPLICATE) {
-                view.backtrack()
+                if (view.backtrack(null) == LeveledView.BacktrackingResult.UNSATISFIED) {
+                    return null
+                }
             } else {
                 val (analysisResult, contradictingClause) = view.deduce()
 
                 if (analysisResult == LeveledView.AnalysisResult.UNSATISFIED) {
-                    view.learn(contradictingClause)
+                    val learnedClause = view.learn(contradictingClause)
 
-                    if (view.backtrack() == LeveledView.BacktrackingResult.UNSATISFIED) {
+                    if (view.backtrack(learnedClause) == LeveledView.BacktrackingResult.UNSATISFIED) {
                         return null
                     }
                 }
