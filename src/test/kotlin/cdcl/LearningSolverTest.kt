@@ -19,4 +19,12 @@ internal class LearningSolverTest {
             LearningSolver.solve(view)
         }
     }
+
+    @Test
+    fun solveCaching() {
+        testAll {
+            val view = CachingLearningView(it)
+            LearningSolver.solve(view)
+        }
+    }
 }

@@ -17,7 +17,7 @@ open class JumpingView(
      * Adds a literal to the list of possibly
      * approved ones that need to be checked later
      */
-    fun push(literal: Literal, wasDeduced: Boolean = false) {
+    open fun push(literal: Literal, wasDeduced: Boolean = false) {
         // prevent multiple exertions
         for (it in 0 until nextIndex) {
             if (values[it] == literal) {

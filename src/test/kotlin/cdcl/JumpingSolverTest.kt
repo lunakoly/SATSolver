@@ -11,4 +11,12 @@ internal class JumpingSolverTest {
             JumpingSolver.solve(view)
         }
     }
+
+    @Test
+    fun solveCaching() {
+        testAll {
+            val view = CachingJumpingView(it)
+            JumpingSolver.solve(view)
+        }
+    }
 }

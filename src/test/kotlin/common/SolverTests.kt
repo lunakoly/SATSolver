@@ -101,23 +101,11 @@ object SolverTests {
     }
 
     private fun benchmarkFile(filename: String, solve: (Formula) -> Solution?) {
-//        println("... Loading problems from '$filename' ...")
         val problems = DIMACSLoader.load(File(filename))
-//        println("Done.")
 
         for (problem in problems) {
             val expression = problem.first
-            problem.second
-
-//            println("Expression: " + expression.represent(mapping))
-//            println("... Searching for solution ...")
             val solution = solve(expression)
-
-//            if (solution == null) {
-//                println("Error at!")
-//            } else {
-//                println("Solution: " + solution.represent(mapping))
-//            }
 
             assertNotNull(solution)
             assertTrue(expression.satisfies(solution!!))

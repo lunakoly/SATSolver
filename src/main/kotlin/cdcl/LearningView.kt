@@ -18,13 +18,13 @@ open class LearningView(
      * Maps an assigned value to the
      * literal it's been deduced from
      */
-    private val origins: Array<Clause?> = Array(cardinality * 2) { null }
+    protected val origins: Array<Clause?> = Array(cardinality * 2) { null }
 
     /**
      * Adds a literal to the list of possibly
      * approved ones that need to be checked later
      */
-    fun push(literal: Literal, origin: Clause? = null) {
+    open fun push(literal: Literal, origin: Clause? = null) {
         // prevent multiple exertions
         for (it in 0 until nextIndex) {
             if (values[it] == literal) {

@@ -35,7 +35,7 @@ abstract class LeveledView(
      * satisfy the formula if called at the
      * right time
      */
-    fun exportSolution(): Solution {
+    open fun exportSolution(): Solution {
         val assignments = values
             .slice(0 until cardinality)
             .map { it.toOuter() }
@@ -95,7 +95,7 @@ abstract class LeveledView(
      * a duplicate assignment of any previously defined
      * variable
      */
-    fun check(): CheckResult {
+    open fun check(): CheckResult {
         val literal = values[uncheckedIndex]
 
         for (it in uncheckedIndex - 1 downTo 0) {
@@ -174,7 +174,7 @@ abstract class LeveledView(
     /**
      * Returns info about a clause (unassignedLeft, someUnassigned, approved)
      */
-    protected fun evaluate(clause: Clause): Triple<Int, Literal?, Int> {
+    protected open fun evaluate(clause: Clause): Triple<Int, Literal?, Int> {
         val assignments = prepareAssignments()
 
         var someUnassigned: Literal? = null
@@ -235,7 +235,7 @@ abstract class LeveledView(
     /**
      * Returns the next literal the solver needs to check
      */
-    fun getNextLiteral(): Literal {
+    open fun getNextLiteral(): Literal {
         val assignments = prepareAssignments()
 
         for (it in 0 until cardinality) {
