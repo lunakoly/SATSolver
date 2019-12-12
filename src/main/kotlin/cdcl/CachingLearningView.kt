@@ -9,7 +9,7 @@ import constructor.Solution
  * prepareAssignments() and iterating `values`
  * each time
  */
-class CachingLearningView(
+open class CachingLearningView(
     /**
      * An input formula constructed by
      * a user
@@ -19,7 +19,7 @@ class CachingLearningView(
     /**
      * Assigned values of variables.
      */
-    private val assignments: Array<Boolean?> = Array(cardinality) { null }
+    protected val assignments: Array<Boolean?> = Array(cardinality) { null }
 
     override fun exportSolution(): Solution {
         val assignments = assignments
@@ -35,7 +35,7 @@ class CachingLearningView(
      * Speeds up checking if a literal has
      * already been pushed
      */
-    private val pushes = mutableSetOf<Literal>()
+    protected val pushes = mutableSetOf<Literal>()
 
     override fun check(): CheckResult {
         val literal = values[uncheckedIndex]

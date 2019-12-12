@@ -37,6 +37,19 @@ open class ShiftedWatchlist(
         return watchlist[literal.value]
     }
 
+    /**
+     * Registers a new clause
+     *
+     *   Time Complexity: Θ(n), n - number of literals per clause
+     * Memory Complexity: Θ(1)
+     */
+    fun learn(clause: ShiftedView.Clause) {
+        // Θ(number of literals per clause)
+        for (literal in clause.literals) {
+            watchlist[literal.value].add(clause)
+        }
+    }
+
     init {
         // O(nm), n - number of clauses
         //        m - average number of literals per clause

@@ -27,4 +27,12 @@ internal class LearningSolverTest {
             LearningSolver.solve(view)
         }
     }
+
+    @Test
+    fun solveSuperCaching() {
+        testAll {
+            val view = SuperCachingLearningView(it)
+            LearningSolver.solve(view)
+        }
+    }
 }

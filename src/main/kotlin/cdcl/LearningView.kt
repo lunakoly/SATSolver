@@ -98,6 +98,7 @@ open class LearningView(
                 }
 
             clauses.add(result)
+            watchlist.learn(result)
             return result
         }
 

@@ -128,7 +128,7 @@ abstract class LeveledView(
      * Returns the index of the first literal
      * with the same level as the one at the `index`
      */
-    protected fun findLevelStart(index: Int): Int {
+    protected open fun findLevelStart(index: Int): Int {
         var result = 0
 
         // find the beginning of the level
@@ -144,7 +144,7 @@ abstract class LeveledView(
      * Returns the index of the last literal
      * with the same level as the one at the `index`
      */
-    protected fun findLevelEnd(index: Int): Int {
+    protected open fun findLevelEnd(index: Int): Int {
         var result = uncheckedIndex - 1
 
         // find the beginning of the level
