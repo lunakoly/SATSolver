@@ -1,6 +1,6 @@
 package common
 
-import general.AbstractVariable
+import sat.general.AbstractVariable
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test

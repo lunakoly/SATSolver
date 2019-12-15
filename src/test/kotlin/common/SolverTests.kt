@@ -1,9 +1,9 @@
 package common
 
-import constructor.Formula
-import constructor.Solution
-import constructor.Variable
-import loaders.DIMACSLoader
+import sat.constructor.Formula
+import sat.constructor.Solution
+import sat.constructor.Variable
+import sat.loaders.DIMACSLoader
 import org.junit.jupiter.api.Assertions.*
 import java.io.File
 

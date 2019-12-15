@@ -1,8 +1,8 @@
 package common
 
-import general.AbstractClause
-import general.AbstractFormula
-import general.AbstractVariable
+import sat.general.AbstractClause
+import sat.general.AbstractFormula
+import sat.general.AbstractVariable
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
