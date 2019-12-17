@@ -1,0 +1,19 @@
+for each unit clause:
+    push(first literal)
+
+    if controverts():
+        return UNSAT
+
+while solution not found:
+    if checked all:
+        push(some new literal)
+
+    if controverts():
+        if not backtrack():
+            return UNSAT
+    else:
+        if deduce() == CONTRAVENTION:
+            learn(controverting clause)
+
+            if not backtrack():
+                return UNSAT

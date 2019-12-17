@@ -1,8 +1,6 @@
 package gui
 
-import gui.debug.FontTestingView
-import gui.debug.LearningSolverView
-import gui.debug.SizeTestingView
+import gui.learning_solver.LearningSolverView
 import gui.styles.CommonStyles
 import javafx.stage.Stage
 import tornadofx.App

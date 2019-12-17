@@ -3,7 +3,7 @@ package gui.styles
 import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.effect.DropShadow
-import javafx.scene.paint.Color
+import javafx.scene.layout.BorderStrokeStyle
 import tornadofx.*
 
 class CommonStyles : Stylesheet() {
@@ -21,6 +21,9 @@ class CommonStyles : Stylesheet() {
         val ACCENT = c("#e8e797")
         val ACCENT_HOVER = c("#e8e7a5")
         val ACCENT_ACTIVE = c("#edecaf")
+        val ACCENT_BANNER = c("#e8e797ee")
+
+        val BANNER_BORDER = c("#ffffff")
 
         val SHADOW = c("#555555")
 
@@ -28,6 +31,8 @@ class CommonStyles : Stylesheet() {
         val title by cssclass()
 
         val code by cssclass()
+
+        val importBanner by cssclass()
 
         val dark by cssclass()
         val light by cssclass()
@@ -125,10 +130,33 @@ class CommonStyles : Stylesheet() {
 
             alignment = Pos.CENTER_LEFT
 
+            label {
+                padding = box(
+                    top = 0.2.em,
+                    left = 0.2.em,
+                    right = 0.2.em,
+                    bottom = 0.2.em
+                )
+            }
+
             label and selected {
                 backgroundColor += ACCENT
                 backgroundRadius += box(2.px)
             }
+        }
+
+        importBanner {
+            backgroundColor += ACCENT
+
+            borderWidth += box(8.px)
+            borderColor += box(BANNER_BORDER)
+            borderStyle += BorderStrokeStyle.DASHED
+
+            borderInsets += box(8.px)
+            borderRadius += box(8.px)
+
+            fontSize = 2.em
+            fontFamily = "Bauhaus 93"
         }
     }
 }
