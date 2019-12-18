@@ -4,6 +4,8 @@ import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.effect.DropShadow
 import javafx.scene.layout.BorderStrokeStyle
+import javafx.scene.layout.Region
+import javafx.scene.paint.Color
 import tornadofx.*
 
 class CommonStyles : Stylesheet() {
@@ -33,6 +35,8 @@ class CommonStyles : Stylesheet() {
         val code by cssclass()
 
         val importBanner by cssclass()
+
+        val clausesList by cssclass()
 
         val dark by cssclass()
         val light by cssclass()
@@ -115,6 +119,9 @@ class CommonStyles : Stylesheet() {
 
             and(hover) {
                 backgroundColor += ACCENT_HOVER
+
+//                scaleX = 1.05
+//                scaleY = 1.05
             }
 
             and(pressed) {
@@ -157,6 +164,25 @@ class CommonStyles : Stylesheet() {
 
             fontSize = 2.em
             fontFamily = "Bauhaus 93"
+        }
+
+        clausesList {
+            fontFamily = "Source Code Pro"
+            textFill = TEXT
+
+            padding = box(0.5.em)
+
+            label {
+                alignment = Pos.CENTER
+            }
+        }
+
+        scrollPane {
+            backgroundColor += Color.TRANSPARENT
+
+            viewport {
+                backgroundColor += Color.TRANSPARENT
+            }
         }
     }
 }

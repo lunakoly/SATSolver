@@ -37,6 +37,6 @@ class FontTestingView : View("Font Testing") {
     }
 
     override val root = scrollpane(true) {
-        fontSeries("ALGORITHM")
+        fontSeries("(1 + ~2 + ~3) * (2 + ~3) * (3)")
     }
 }

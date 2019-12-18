@@ -1,5 +1,6 @@
 package gui.learning_solver
 
+import sat.cdcl.CachingLearningView
 import sat.constructor.Formula
 import sat.constructor.Variable
 import sat.loaders.DIMACSLoader
@@ -24,18 +25,38 @@ class LearningSolverController : Controller() {
          * If the user has entered a formula
          * then it's linked here
          */
-        var formula: Formula,
+        val formula: Formula,
         /**
          * If the user has entered a formula
          * then it's name mapping is linked here
          */
-        var names: Map<Variable, String>
+        val names: Map<Variable, String>,
+        /**
+         * Inner state representation
+         */
+        val view: CachingLearningView
     )
 
     /**
      * The current task
      */
     var task: Task? = null
+
+    /**
+     * List of callbacks to call whenever
+     * the formula gets updated
+     */
+    val taskUpdateListeners = ArrayList<(Task) -> Unit>()
+
+    private fun update() {
+        val task = this.task
+
+        if (task != null) {
+            taskUpdateListeners.forEach {
+                it(task)
+            }
+        }
+    }
 
     /**
      * Checks if a file can be used as a
@@ -46,20 +67,23 @@ class LearningSolverController : Controller() {
     fun checkSelectedFile(file: File) {
         runAsync {
             try {
-                val formulas = DIMACSLoader.load(file)
+                val formula = DIMACSLoader.load(file)
 
-                if (formulas.isNotEmpty()) {
-                    task = Task(formulas.first().first, formulas.first().second)
-                    return@runAsync true to ""
-                }
+                task = Task(
+                    formula.first,
+                    formula.second,
+                    CachingLearningView(formula.first)
+                )
+
+                return@runAsync true to ""
             } catch (e: Exception) {
                 return@runAsync false to "${e.message}. Please select another file"
             }
-
-            return@runAsync false to "No formulas in file!"
         } ui {
             // succeeded?
             if (it.first) {
+//                view.formulaPrinter.reset()
+                update()
                 view.displayFormula()
             } else {
                 // show message

@@ -60,13 +60,13 @@ object DIMACSLoader : AbstractLoader {
             }
         }
 
-        // to be able tu turn the formula back
+        // to be able to turn the formula back
         // into something human-readable.
         // debug only
         val mapping = mutableMapOf<Variable, String>()
 
         for (index in variables.indices) {
-            mapping[variables[index]] = index.toString()
+            mapping[variables[index]] = (index + 1).toString()
         }
 
         return result to mapping
@@ -106,11 +106,7 @@ object DIMACSLoader : AbstractLoader {
     /**
      * Loads all problems from a LineNumber source
      */
-    private fun loadProblems(
-        source: LineIterator
-    ): ArrayList<Pair<Formula, Map<Variable, String>>> {
-        val formulas = ArrayList<Pair<Formula, Map<Variable, String>>>()
-
+    private fun loadProblems(source: LineIterator): Pair<Formula, Map<Variable, String>> {
         while (source.hasNext()) {
             val header = source.next()
 
@@ -119,7 +115,7 @@ object DIMACSLoader : AbstractLoader {
                     'c' -> { /* comment */ }
 
                     'p' -> {
-                        formulas.add(loadProblem(source))
+                        return loadProblem(source)
                     }
 
                     '%' -> {
@@ -139,7 +135,7 @@ object DIMACSLoader : AbstractLoader {
             }
         }
 
-        return formulas
+        throw source.raise("No formulas found!")
     }
 
     /**
@@ -201,7 +197,7 @@ object DIMACSLoader : AbstractLoader {
         }
     }
 
-    override fun load(file: File): ArrayList<Pair<Formula, Map<Variable, String>>> {
+    override fun load(file: File): Pair<Formula, Map<Variable, String>> {
         return file.useLines {
             // withIndex turned out to be inconvenient.
             // the code looks 'dirty' and 'difficult'

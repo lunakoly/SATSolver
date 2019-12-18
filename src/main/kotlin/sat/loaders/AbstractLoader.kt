@@ -9,7 +9,7 @@ import java.io.File
  */
 interface AbstractLoader {
     /**
-     * Loads a set of formulas from a file
+     * Loads a formula from a file
      */
-    fun load(file: File) : ArrayList<Pair<Formula, Map<Variable, String>>>
+    fun load(file: File) : Pair<Formula, Map<Variable, String>>
 }

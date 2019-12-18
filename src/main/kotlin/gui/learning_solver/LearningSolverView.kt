@@ -50,7 +50,7 @@ class LearningSolverView : View("Learning Solver") {
                     }
                 }
 
-                center
+                center = formulaPrinter.root
             }
 
             tab(messages["tab_implication_graph"]) {
@@ -118,11 +118,5 @@ class LearningSolverView : View("Learning Solver") {
      */
     fun displayFormula() {
         importBanner.hide()
-
-        assert(controller.task != null)
-
-        controller.task?.let {
-            formulaPrinter.display(it)
-        }
     }
 }
