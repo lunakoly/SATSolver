@@ -1,20 +1,23 @@
 package gui.learning_solver
 
-import sat.cdcl.CachingLearningView
+import sat.cdcl.LearningSolver
+import sat.cdcl.LoggingCachingLearningView
 import sat.constructor.Formula
+import sat.constructor.Solution
 import sat.constructor.Variable
 import sat.loaders.DIMACSLoader
 import tornadofx.Controller
+import tornadofx.get
 import java.io.File
 
 /**
  * Handles the functionality of LearningSolverView
  */
-class LearningSolverController : Controller() {
+class LSController : Controller() {
     /**
      * Corresponding view
      */
-    private val view: LearningSolverView by inject()
+    private val view: LSView by inject()
 
     /**
      * If the user has selected a task
@@ -34,7 +37,11 @@ class LearningSolverController : Controller() {
         /**
          * Inner state representation
          */
-        val view: CachingLearningView
+        val view: LoggingCachingLearningView,
+        /**
+         * Possible solution if present
+         */
+        val solution: Solution?
     )
 
     /**
@@ -42,20 +49,16 @@ class LearningSolverController : Controller() {
      */
     var task: Task? = null
 
-    /**
-     * List of callbacks to call whenever
-     * the formula gets updated
-     */
-    val taskUpdateListeners = ArrayList<(Task) -> Unit>()
+    private fun solve(formula: Pair<Formula, Map<Variable, String>>) {
+        val expression = LoggingCachingLearningView(formula.first)
+        val solution = LearningSolver.solve(expression)
 
-    private fun update() {
-        val task = this.task
-
-        if (task != null) {
-            taskUpdateListeners.forEach {
-                it(task)
-            }
-        }
+        task = Task(
+            formula.first,
+            formula.second,
+            expression,
+            solution
+        )
     }
 
     /**
@@ -65,26 +68,21 @@ class LearningSolverController : Controller() {
      * otherwise
      */
     fun checkSelectedFile(file: File) {
+        // show message
+        view.importBanner.message = messages["text_solving"]
+
         runAsync {
             try {
-                val formula = DIMACSLoader.load(file)
-
-                task = Task(
-                    formula.first,
-                    formula.second,
-                    CachingLearningView(formula.first)
-                )
-
-                return@runAsync true to ""
+                solve(DIMACSLoader.load(file))
             } catch (e: Exception) {
-                return@runAsync false to "${e.message}. Please select another file"
+                return@runAsync false to "${e.message}. ${messages["text_change_file"]}"
             }
+
+            return@runAsync true to ""
         } ui {
             // succeeded?
             if (it.first) {
-//                view.formulaPrinter.reset()
-                update()
-                view.displayFormula()
+                view.illustrate()
             } else {
                 // show message
                 view.importBanner.message = it.second

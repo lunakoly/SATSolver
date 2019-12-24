@@ -179,21 +179,6 @@ open class ShiftedView(
      */
     val clauses = mutableSetOf<Clause>()
 
-    fun exportClauses(): Set<sat.constructor.Clause> {
-        return clauses
-            .map { clause ->
-                val result = sat.constructor.Clause()
-
-                clause.literals
-                    .forEach {
-                        result.literals.add(it.toOuter())
-                    }
-
-                result
-            }
-            .toSet()
-    }
-
     /**
      * A handy alias for the number of
      * variables

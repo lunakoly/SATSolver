@@ -1,2 +1,3 @@
 # SATSolver
-A hometask project
+A homework task
+![Preview](/images/img1.png)

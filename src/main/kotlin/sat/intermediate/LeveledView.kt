@@ -49,7 +49,7 @@ abstract class LeveledView(
      * backtrack to. Deduced literals have
      * the same level
      */
-    protected val levels: Array<Int> = Array(cardinality * 2) { -1 }
+    val levels: Array<Int> = Array(cardinality * 2) { -1 }
 
     /**
      * Points to the next empty cell
@@ -59,7 +59,7 @@ abstract class LeveledView(
     /**
      * Points the the next unchecked cell
      */
-    protected var uncheckedIndex = 0
+    var uncheckedIndex = 0
 
     /**
      * Returns true if the solution is found

@@ -1,9 +1,9 @@
 package gui.learning_solver
 
-import gui.components.Algorithm
-import gui.components.FormulaPrinter
+import gui.components.AssignmentsPane
+import gui.components.ClausesPane
 import gui.components.ImportBanner
-import gui.styles.CommonStyles
+import gui.styles.TabStyles
 import javafx.event.EventTarget
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.Priority
@@ -13,22 +13,26 @@ import tornadofx.*
  * Window that visualizes LearningSolver
  * algorithm.
  */
-class LearningSolverView : View("Learning Solver") {
+class LSView : View("Solver") {
     /**
      * Corresponding controller that handles main
      * actions
      */
-    private val controller: LearningSolverController by inject()
+    private val controller: LSController by inject()
 
     /**
-     * LearningSolver algorithm
+     * Pane that shows the clauses
      */
-    val algorithm = Algorithm("/algorithm.txt", 25.em)
+    private var clausesPane = ClausesPane()
 
     /**
-     * Displays the clauses
+     * Illustrates the assignments and their levels
      */
-    val formulaPrinter = FormulaPrinter()
+    private val assignmentsPane = AssignmentsPane {
+        controller.task?.let {
+            illustrate(it.names, it.view)
+        }
+    }
 
     /**
      * The grid with the three main sections
@@ -36,7 +40,9 @@ class LearningSolverView : View("Learning Solver") {
     private val solverPane = gridpane {
         row {
             tab(messages["tab_cnf"]) {
-                addClass(CommonStyles.dark)
+                addClass(TabStyles.dark)
+
+                center = clausesPane
 
                 bottom = stackpane {
                     button(messages["button_change_file"]) {
@@ -49,40 +55,24 @@ class LearningSolverView : View("Learning Solver") {
                         padding = box(1.em)
                     }
                 }
-
-                center = formulaPrinter.root
             }
 
             tab(messages["tab_implication_graph"]) {
-                addClass(CommonStyles.light)
-            }
-
-            tab(messages["tab_algorithm"]) {
-                addClass(CommonStyles.dark)
-
-                bottom = stackpane {
-                    button(messages["button_next"])
-
-                    style {
-                        padding = box(1.em)
-                    }
-                }
-
-                center = algorithm.root
+                addClass(TabStyles.light)
+                center = assignmentsPane
             }
         }
 
         constraintsForRow(0).percentHeight = 100.0
         constraintsForColumn(0).percentWidth = 30.0
         constraintsForColumn(1).hgrow = Priority.ALWAYS
-        constraintsForColumn(2).percentWidth = 32.0
     }
 
     /**
      * Constructs a tab with a title
      */
     private fun EventTarget.tab(title: String, op: BorderPane.() -> Unit) = borderpane {
-        addClass(CommonStyles.tab)
+        addClass(TabStyles.tab)
         top = tabTitle(title)
         apply(op)
     }
@@ -92,7 +82,7 @@ class LearningSolverView : View("Learning Solver") {
      * for centering
      */
     private fun tabTitle(title: String) = stackpane {
-        label(title).addClass(CommonStyles.title)
+        label(title).addClass(TabStyles.title)
     }
 
     /**
@@ -116,7 +106,13 @@ class LearningSolverView : View("Learning Solver") {
      * Notifies the view that it's now
      * safe to load the formula layout
      */
-    fun displayFormula() {
+    fun illustrate() {
+        controller.task?.let {
+            clausesPane.illustrate(it.names, it.view)
+            assignmentsPane.reset()
+            assignmentsPane.illustrate(it.names, it.view)
+        }
+
         importBanner.hide()
     }
 }

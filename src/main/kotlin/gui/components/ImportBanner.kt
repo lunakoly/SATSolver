@@ -1,6 +1,6 @@
 package gui.components
 
-import gui.styles.CommonStyles
+import gui.styles.BannerStyles
 import javafx.scene.control.Label
 import javafx.scene.input.DragEvent
 import javafx.scene.input.MouseButton
@@ -32,7 +32,7 @@ class ImportBanner(
     private var messageLabel: Label by singleAssign()
 
     override val root = stackpane {
-        addClass(CommonStyles.importBanner)
+        addClass(BannerStyles.importBanner)
 
         messageLabel = label(defaultMessage)
 

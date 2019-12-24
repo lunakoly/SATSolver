@@ -1,99 +1,34 @@
 package gui.styles
 
-import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.effect.DropShadow
-import javafx.scene.layout.BorderStrokeStyle
-import javafx.scene.layout.Region
 import javafx.scene.paint.Color
 import tornadofx.*
 
+/**
+ * Defines common css rules
+ */
 class CommonStyles : Stylesheet() {
     companion object {
-        val BACKGROUND = c("#ffffff")
-        val BACKGROUND_DARK = c("#f8f8f8")
+        // "Greek Diner Inline TT"
+        // "Hansen"
+        // "Harrington"
+        // "Jokerman"
+        const val FONT = "Bauhaus 93"
 
-        val BORDER = c("#f0f0f0")
-        val BORDER_DARK = c("#e0e0e0")
-
-        val FOREGROUND = c("#444444")
-        val FOREGROUND_DARK = c("#333333")
-        val TEXT = c("#111111")
+        val BUTTON_TEXT = c("#444444")
 
         val ACCENT = c("#e8e797")
         val ACCENT_HOVER = c("#e8e7a5")
         val ACCENT_ACTIVE = c("#edecaf")
-        val ACCENT_BANNER = c("#e8e797ee")
-
-        val BANNER_BORDER = c("#ffffff")
 
         val SHADOW = c("#555555")
-
-        val tab by cssclass()
-        val title by cssclass()
-
-        val code by cssclass()
-
-        val importBanner by cssclass()
-
-        val clausesList by cssclass()
-
-        val dark by cssclass()
-        val light by cssclass()
-
-        val selected by cssclass()
     }
 
     init {
-        tab {
-            title {
-                fontSize = 2.em
-                fontFamily = "Bauhaus 93"
-                // "Greek Diner Inline TT"
-                // "Hansen"
-                // "Harrington"
-                // "Jokerman"
-
-                padding = box(
-                    top = 0.5.em,
-                    left = 0.em,
-                    right = 0.em,
-                    bottom = 0.5.em
-                )
-
-//                alignment = Pos.CENTER
-//                maxWidth = infinity
-
-                borderWidth += box(
-                    top = 0.px,
-                    left = 0.px,
-                    right = 0.px,
-                    bottom = 4.px
-                )
-            }
-        }
-
-        tab and light {
-            backgroundColor += BACKGROUND
-
-            title {
-                borderColor += box(BORDER)
-                textFill = FOREGROUND
-            }
-        }
-
-        tab and dark {
-            backgroundColor += BACKGROUND_DARK
-
-            title {
-                borderColor += box(BORDER_DARK)
-                textFill = FOREGROUND_DARK
-            }
-        }
-
         button {
             backgroundColor += ACCENT
-            textFill = FOREGROUND
+            textFill = BUTTON_TEXT
 
             backgroundRadius += box(4.px)
             borderRadius += box(4.px)
@@ -106,7 +41,7 @@ class CommonStyles : Stylesheet() {
             )
 
             fontSize = 2.em
-            fontFamily = "Bauhaus 93"
+            fontFamily = FONT
 
             cursor = Cursor.HAND
 
@@ -129,59 +64,41 @@ class CommonStyles : Stylesheet() {
             }
         }
 
-        code {
-            fontFamily = "Source Code Pro"
-            textFill = TEXT
-
-            padding = box(0.5.em)
-
-            alignment = Pos.CENTER_LEFT
-
-            label {
-                padding = box(
-                    top = 0.2.em,
-                    left = 0.2.em,
-                    right = 0.2.em,
-                    bottom = 0.2.em
-                )
-            }
-
-            label and selected {
-                backgroundColor += ACCENT
-                backgroundRadius += box(2.px)
-            }
-        }
-
-        importBanner {
-            backgroundColor += ACCENT
-
-            borderWidth += box(8.px)
-            borderColor += box(BANNER_BORDER)
-            borderStyle += BorderStrokeStyle.DASHED
-
-            borderInsets += box(8.px)
-            borderRadius += box(8.px)
-
-            fontSize = 2.em
-            fontFamily = "Bauhaus 93"
-        }
-
-        clausesList {
-            fontFamily = "Source Code Pro"
-            textFill = TEXT
-
-            padding = box(0.5.em)
-
-            label {
-                alignment = Pos.CENTER
-            }
-        }
-
         scrollPane {
             backgroundColor += Color.TRANSPARENT
 
             viewport {
                 backgroundColor += Color.TRANSPARENT
+            }
+        }
+
+        scrollBar {
+            backgroundColor += Color.TRANSPARENT
+
+            thumb {
+                backgroundRadius += box(7.px)
+            }
+
+            padding = box(
+                top = 0.0.px,
+                left = 3.0.px,
+                right = 3.0.px,
+                bottom = 0.0.px
+            )
+
+            s(incrementArrow, decrementArrow) {
+                padding = box(0.px)
+            }
+
+            and(vertical) {
+                s(incrementButton, decrementButton) {
+                    padding = box(
+                        top = 0.0.px,
+                        left = 0.0.px,
+                        right = 14.0.px,
+                        bottom = 0.0.px
+                    )
+                }
             }
         }
     }

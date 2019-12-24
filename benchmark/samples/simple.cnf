@@ -1,8 +1,9 @@
 c
 c A simple task
 c
-p cnf 3 3
+p cnf 3 4
 1 -2 -3 0
+1 -2 3 0
 2 -3 0
 3 0
 %

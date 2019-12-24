@@ -73,7 +73,7 @@ open class LearningView(
      * variables from `contradictingClause` and the literal
      * origin. Returns the new clause or null
      */
-    fun learn(contradictingClause: Clause?): Clause? {
+    open fun learn(contradictingClause: Clause?): Clause? {
         val contradictingVariable = values[uncheckedIndex - 1].variable
         val literalOrigin = origins[uncheckedIndex - 1]
 
@@ -86,13 +86,13 @@ open class LearningView(
             val result = Clause()
 
             contradictingClause.literals
-                .filter { it.variable == contradictingVariable }
+                .filter { it.variable != contradictingVariable }
                 .forEach {
                     result.literals.add(it)
                 }
 
             literalOrigin.literals
-                .filter { it.variable == contradictingVariable }
+                .filter { it.variable != contradictingVariable }
                 .forEach {
                     result.literals.add(it)
                 }

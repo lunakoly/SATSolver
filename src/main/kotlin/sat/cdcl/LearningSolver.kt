@@ -35,7 +35,6 @@ object LearningSolver : AbstractSolver<LearningView> {
                 }
             } else {
                 val (analysisResult, contradictingClause) = view.deduce()
-
                 if (analysisResult == LeveledView.AnalysisResult.UNSATISFIED) {
                     val learnedClause = view.learn(contradictingClause)
 
